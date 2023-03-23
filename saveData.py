@@ -55,7 +55,7 @@ def saveData(target, brand, img):
         wr = csv.writer(f, delimiter=' ')
         for i in range(len(bbox)):
             x, y, width, height = bbox.iloc[i]
-            wr.writerow([0, (x+mw/2)/mw, (y+mh/2)/mh, width/mw, height/mh])
+            wr.writerow([0, (x+width/2)/mw, (y+height/2)/mh, width/mw, height/mh])
 
 if __name__ == "__main__":
     os.chdir('..')
