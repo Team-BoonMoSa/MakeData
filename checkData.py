@@ -2,7 +2,7 @@ import os
 
 
 def checkData(target):
-    os.chdir(init + '/FlickrLogos-v2')
+    os.chdir(init + '/LogoRec')
     try:
         os.chdir('images/' + target)
     except:
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     os.chdir('..')
     init = os.getcwd()
     try:
-        os.chdir(init + '/FlickrLogos-v2')
+        os.chdir(init + '/LogoRec')
     except:
         print('경로가 없어용 ~')
 
