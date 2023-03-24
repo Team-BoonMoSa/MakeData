@@ -58,8 +58,8 @@ LogoRec
 ```shell
 Paraent/datasets/MakeData$ python checkData.py
 ==================== train ====================
-Images:  1866
-Ground Truth:  1866
+Images:  1861
+Ground Truth:  1861
 ==================== train ====================
 ==================== val ====================
 Images:  187
