@@ -22,7 +22,7 @@ Parent
 ### saveData.py
 
 ```shell
-Paraent/datasets/MakeData$ python saveData.py
+Parent/datasets/MakeData$ python saveData.py
 100%|████████████████████████████████████████████████████████████████████████| 2235/2235 [00:45<00:00, 49.47it/s]
 ==============================
 No. Total Data:  2235
@@ -56,7 +56,7 @@ LogoRec
 ### checkData.py
 
 ```shell
-Paraent/datasets/MakeData$ python checkData.py
+Parent/datasets/MakeData$ python checkData.py
 ==================== train ====================
 Images:  1861
 Ground Truth:  1861
