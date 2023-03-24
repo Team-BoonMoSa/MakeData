@@ -17,7 +17,7 @@ Parent
 ### saveData.py
 
 ```shell
-Paraent/datasets/MakeData$ python saveData.py
+Parent/datasets/MakeData$ python saveData.py
 100%|████████████████████████████████████████████████████████████████| 33/33 [00:26<00:00,  1.27it/s]
 ==============================
 No. Total Data:  2240
@@ -51,7 +51,7 @@ FlickrLogos-v2
 ### checkData.py
 
 ```shell
-Paraent/datasets/MakeData$ python checkData.py
+Parent/datasets/MakeData$ python checkData.py
 ==================== train ====================
 Images:  1866
 Ground Truth:  1866
