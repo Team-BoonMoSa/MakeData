@@ -1,12 +1,17 @@
 ```shell
 Parent
 └── datasets
-    ├── FlickrLogos-v2
-    │   ├── classes
-    │   │   ├── jpg
-    │   │   ├── masks
-    │   │   └── thumbnails
-    │   └── scripts
+    ├── FlickrLogos_47
+    │   ├── scripts
+    │   ├── test
+    │   │   ├── 000000
+    │   │   ├── 000001
+    │   │   └── 000002
+    │   └── train
+    │       ├── 000000
+    │       ├── 000001
+    │       ├── 000002
+    │       └── no-logo
     └── MakeData
         ├── checkData.py
         └── saveData.py
@@ -18,26 +23,26 @@ Parent
 
 ```shell
 Paraent/datasets/MakeData$ python saveData.py
-100%|████████████████████████████████████████████████████████████████| 33/33 [00:26<00:00,  1.27it/s]
+100%|████████████████████████████████████████████████████████████████████████| 2235/2235 [00:45<00:00, 49.47it/s]
 ==============================
-No. Total Data:  2240
+No. Total Data:  2235
 ==============================
-Training Data: No. Images 1866
-Training Data: No. GT 1866
+Training Data: No. Images 1861
+Training Data: No. GT 1861
 Validation Data: No. Images 187
 Validation Data: No. GT 187
 Test Data: No. Images 187
 Test Data: No. GT 187
 ==============================
-No. Total Image Data:  2240
-No. Total GT Data:  2240
+No. Total Image Data:  2235
+No. Total GT Data:  2235
 ==============================
 ```
 
 > Result
 
 ```shell
-FlickrLogos-v2
+LogoRec
 ├── images
 │   ├── test
 │   ├── train

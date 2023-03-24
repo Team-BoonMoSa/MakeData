@@ -9,23 +9,12 @@ from tqdm import tqdm
 import cv2
 
 
-def initializeData():
+def initializeData(DataStoreName):
     tmp = os.getcwd()
-    try:
-        os.chdir('FlickrLogos-v2')
-    except Exception as e:
-        print('There is no FlickrLogos-v2')
-        print(e)
-        os.chdir(tmp)
-        return
-    try:
-        shutil.rmtree('images')
-    except:
-        pass
-    try:
-        shutil.rmtree('labels')
-    except:
-        pass
+    if DataStoreName in os.listdir():
+        shutil.rmtree(DataStoreName)
+    os.mkdir(DataStoreName)
+    os.chdir(DataStoreName)
     os.mkdir('images')
     os.chdir('images')
     os.mkdir('train')
@@ -39,72 +28,93 @@ def initializeData():
     os.mkdir('test')
     os.chdir(tmp)
 
-
-def saveData(target, brand, img):
-    targetDirImg = datasets + '/FlickrLogos-v2/images/' + target
-    targetDirLab = datasets + '/FlickrLogos-v2/labels/' + target
-    absDataDir = datasets + '/FlickrLogos-v2'
+def makePoly(relMask):
+    tmp = cv2.imread(relMask)
+    mh, mw, _ = tmp.shape
+    tmp = cv2.cvtColor(tmp, cv2.COLOR_BGR2GRAY)
+    contours, _ = cv2.findContours(tmp, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+    tmp = np.array(contours[0]/[mw, mh])
+    poly = tmp.reshape(len(contours[0])*2)
+    return poly
+    
+def saveData(target, relImg):
+    targetDirImg = DataStoreDir + '/images/' + target
+    targetDirLab = DataStoreDir + '/labels/' + target
+    imgName = relImg[-13:]
     # Make Target Data: IMG
-    absImgDir = absDataDir + '/classes/jpg/' + brand + '/' + img
-    shutil.copy(absImgDir, targetDirImg + '/' + img)
-    # Make Target Data: Bbox (GT)
-    absBboxDir = absDataDir + '/classes/masks/' + brand.lower() + '/' + img + '.bboxes.txt'
-    mh, mw, _ = cv2.imread(absImgDir).shape
-    bbox = pd.read_csv(absBboxDir, sep=' ')
-    with open(targetDirLab + '/' + img[:-4] + '.txt', 'a', encoding='utf-8') as f:
+    shutil.copy(relImg, targetDirImg + '/' + imgName)
+    # Make Target Data: Poly (GT)
+    gt = relImg.replace('.png', '.gt_data.txt')
+    gt = pd.read_csv(gt, sep=' ', header=None)
+    with open(targetDirLab + '/' + imgName.replace('.png', '.txt'), 'a', encoding='utf-8') as f:
         wr = csv.writer(f, delimiter=' ')
-        for i in range(len(bbox)):
-            x, y, width, height = bbox.iloc[i]
-            wr.writerow([0, (x+width/2)/mw, (y+height/2)/mh, width/mw, height/mh])
+        for i in range(len(gt)):
+            mask = gt.iloc[i, 6]
+            relMask = relImg.replace('.png', '.' + mask + '.png')
+            poly = makePoly(relMask)
+            wr.writerow([0, *poly])
 
 if __name__ == "__main__":
+    DataStoreName = "LogoRec"
     os.chdir('..')
-    initializeData()
+    initializeData(DataStoreName)
 
     datasets = os.getcwd()
+    DataStoreDir = datasets + '/' + DataStoreName
 
-    os.chdir(datasets + '/FlickrLogos-v2/classes/jpg')
-    brands = os.listdir()
+    candidate = []
+    
+    tmp = "train/filelist-logosonly"
+    file = open("FlickrLogos_47/" + tmp + ".txt", "r")
+    while True:
+        line = file.readline()
+        if not line:
+            break
+        candidate.append('./FlickrLogos_47/train' + line.strip()[1:])
+
+    tmp = "test/filelist"
+    file = open("FlickrLogos_47/" + tmp + ".txt", "r")
+    while True:
+        line = file.readline()
+        if not line:
+            break
+        candidate.append('./FlickrLogos_47/test' + line.strip()[1:])
 
     cnt = 0
-    for brand in tqdm(brands):
-        if not '.' in brand and not brand == 'no-logo':
-            os.chdir(datasets + '/FlickrLogos-v2/classes/jpg/' + brand)
-            for img in os.listdir():
-                if '.jpg' in img:
-                    if cnt % 12 == 0:
-                        saveData('val', brand, img)
-                    elif cnt % 12 == 1:
-                        saveData('test', brand, img)
-                    else:
-                        saveData('train', brand, img)
-                    cnt += 1
+    for c in tqdm(candidate):
+        if cnt % 12 == 0:
+            saveData('val', c)
+        elif cnt % 12 == 1:
+            saveData('test', c)
+        else:
+            saveData('train', c)
+        cnt += 1
 
     print('=' * 30)
     print('No. Total Data: ', cnt)
     print('=' * 30)
 
-    os.chdir(datasets + '/FlickrLogos-v2/images/train')
+    os.chdir(DataStoreDir + '/images/train')
     tin = len(os.listdir())
     print('Training Data: No. Images', tin)
 
-    os.chdir(datasets + '/FlickrLogos-v2/labels/train')
+    os.chdir(DataStoreDir + '/labels/train')
     ttn = len(os.listdir())
     print('Training Data: No. GT', ttn)
 
-    os.chdir(datasets + '/FlickrLogos-v2/images/val')
+    os.chdir(DataStoreDir + '/images/val')
     vin = len(os.listdir())
     print('Validation Data: No. Images', vin)
 
-    os.chdir(datasets + '/FlickrLogos-v2/labels/val')
+    os.chdir(DataStoreDir + '/labels/val')
     vtn = len(os.listdir())
     print('Validation Data: No. GT', vtn)
 
-    os.chdir(datasets + '/FlickrLogos-v2/images/test')
+    os.chdir(DataStoreDir + '/images/test')
     ttin = len(os.listdir())
     print('Test Data: No. Images', ttin)
 
-    os.chdir(datasets + '/FlickrLogos-v2/labels/test')
+    os.chdir(DataStoreDir + '/labels/test')
     tttn = len(os.listdir())
     print('Test Data: No. GT', tttn)
 
