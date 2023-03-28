@@ -1,3 +1,51 @@
+# How to use?
+
+### labelme2YOLOv5.py
+
+```shell
+Parent
+└── datasets
+    ├── MakeData
+    │   ├── README.md
+    │   ├── checkData.py
+    │   ├── labelme2YOLOv5.py
+    │   └── saveData.py
+    └── tmp
+        ├── data1.jpeg
+        ├── data1.json
+        ├── ...
+```
+
+```python
+Parent/datasets/MakeData$ python labelme2YOLOv5.py
+100%|█████████████████████████████████████████████| 5/5 [00:00<00:00,  9.03it/s]
+==============================
+No. Total Data:  5
+==============================
+Training Data: No. Images 3
+Training Data: No. GT 3
+Validation Data: No. Images 2
+Validation Data: No. GT 2
+==============================
+No. Total Image Data:  5
+No. Total GT Data:  5
+==============================
+```
+
+> Result
+
+```shell
+labelme
+├── images
+│   ├── train
+│   └── val
+└── labels
+    ├── train
+    └── val
+```
+
+### saveData.py
+
 ```shell
 Parent
 └── datasets
@@ -16,10 +64,6 @@ Parent
         ├── checkData.py
         └── saveData.py
 ```
-
-# How to use?
-
-### saveData.py
 
 ```shell
 Parent/datasets/MakeData$ python saveData.py
