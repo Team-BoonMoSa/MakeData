@@ -28,25 +28,26 @@ def initializeData(DataStoreName):
 def labelme2YOLOv5(target, relJson):
     targetDirImg = DataStoreDir + '/images/' + target
     targetDirLab = DataStoreDir + '/labels/' + target
-    relImage = relJson.replace('.json', '.jpeg')
+    relImage = relJson.replace('.json', '.jpg')
     # Make Target Data: IMG
     shutil.copy(relImage, targetDirImg + '/' + relImage)
     # Make Target Data: Poly (GT)
     h, w, _ = cv2.imread(relImage).shape
     with open(relJson) as f:
         data = json.load(f)
-    tmp = data['shapes'][0]['points']
-    tar = []
-    cnt = 0
-    for j in tmp:
-        for k in j:
-            if cnt % 2 == 0:
-                tar.append(k/w)
-            else:
-                tar.append(k/h)
-    with open(targetDirLab + '/' + relJson.replace('.json', '.txt'), 'a', encoding='utf-8') as f:
-        wr = csv.writer(f, delimiter=' ')
-        wr.writerow([0, *tar])
+    for i in range(len(data['shapes'])):
+        tmp = data['shapes'][i]['points'] 
+        tar = []
+        cnt = 0
+        for j in tmp:
+            for k in j:
+                if cnt % 2 == 0:
+                    tar.append(k/w)
+                else:
+                    tar.append(k/h)
+        with open(targetDirLab + '/' + relJson.replace('.json', '.txt'), 'a', encoding='utf-8') as f:
+            wr = csv.writer(f, delimiter=' ')
+            wr.writerow([0, *tar])
 
 if __name__ == "__main__":
     DataStoreName = "labelme"
