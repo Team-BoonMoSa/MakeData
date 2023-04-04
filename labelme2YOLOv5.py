@@ -36,15 +36,12 @@ def labelme2YOLOv5(target, relJson):
     with open(relJson) as f:
         data = json.load(f)
     for i in range(len(data['shapes'])):
-        tmp = data['shapes'][i]['points'] 
+        tmp = data['shapes'][i]['points']
         tar = []
         cnt = 0
         for j in tmp:
-            for k in j:
-                if cnt % 2 == 0:
-                    tar.append(k/w)
-                else:
-                    tar.append(k/h)
+            tar.append(j[0]/w)
+            tar.append(j[1]/h)
         with open(targetDirLab + '/' + relJson.replace('.json', '.txt'), 'a', encoding='utf-8') as f:
             wr = csv.writer(f, delimiter=' ')
             wr.writerow([0, *tar])
@@ -68,6 +65,7 @@ if __name__ == "__main__":
     for c in tqdm(candidate):
         if cnt % 3 == 0:
             labelme2YOLOv5('val', c)
+            labelme2YOLOv5('train', c)
         else:
             labelme2YOLOv5('train', c)
         cnt += 1
