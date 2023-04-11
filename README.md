@@ -6,10 +6,7 @@
 Parent
 └── datasets
     ├── MakeData
-    │   ├── README.md
-    │   ├── checkData.py
-    │   ├── labelme2YOLOv5.py
-    │   └── saveData.py
+    │   └─ labelme2YOLOv5.py
     └── tmp
         ├── data1.jpeg
         ├── data1.json
