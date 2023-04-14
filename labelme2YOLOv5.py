@@ -38,7 +38,6 @@ def labelme2YOLOv5(target, relJson):
     for i in range(len(data['shapes'])):
         tmp = data['shapes'][i]['points']
         tar = []
-        cnt = 0
         for j in tmp:
             tar.append(j[0]/w)
             tar.append(j[1]/h)
